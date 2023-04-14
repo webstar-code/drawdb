@@ -21,6 +21,7 @@ export default function Login() {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     console.log('google sign in');
+    console.log('google sign in');
     let userAgent = navigator.userAgent;
     let browserName;
     if (userAgent.match(/chrome|chromium|crios/i)) {
