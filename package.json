@@ -11,8 +11,9 @@
     "lint:eslint:fix": "eslint --ignore-path .eslintignore --fix"
   },
   "lint-staged": {
-    "*.js": [
+    "**/*.{js,jsx,ts,tsx}": [
       "npm run lint:eslint:fix",
+      "prettier --write",
       "git add --force"
     ],
     "*.json": [
@@ -23,6 +24,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
     "firebase": "^9.17.1",
+    "lint-staged": "^13.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",

@@ -1,14 +1,13 @@
-import { getRedirectResult, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userApi } from '../api/user';
 import { GOOGLE_ICON } from '../assets';
 import { Button } from '../components/Button';
 import { auth } from '../firebase';
 import { useAppDispatach, useAppSelector } from '../hooks/useRedux';
 import { addUserProfile } from '../reducers/userSlice';
 
-const x = { asd: 'Asd', asd123: '!23' };
+const x = [1, 2, 3];
 
 export default function Login() {
   const { user } = useAppSelector((state) => state.userSlice);
@@ -20,26 +19,22 @@ export default function Login() {
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    console.log('google sign in');
-    console.log('google sign in');
     let userAgent = navigator.userAgent;
-    let browserName;
     if (userAgent.match(/chrome|chromium|crios/i)) {
       await signInWithRedirect(auth, provider);
-      browserName = 'chrome';
+      return;
     } else if (userAgent.match(/firefox|fxios/i)) {
-      browserName = 'firefox';
+      return;
     } else if (userAgent.match(/safari/i)) {
       await signInWithPopup(auth, provider);
-      browserName = 'safari';
+      return;
     } else if (userAgent.match(/opr\//i)) {
-      browserName = 'opera';
+      return;
     } else if (userAgent.match(/edg/i)) {
-      browserName = 'edge';
+      return;
     } else {
-      browserName = 'No browser detection';
+      return;
     }
-    await getRedirectResult(auth);
   };
 
   useEffect(() => {
@@ -58,7 +53,7 @@ export default function Login() {
       return;
     }
     setError(false);
-    dispatch(addUserProfile({ name })).then((data) => {
+    dispatch(addUserProfile({ name })).then(() => {
       navigate('/diagrams');
     });
   };
@@ -69,7 +64,9 @@ export default function Login() {
         <div className="w-full h-[40%] bg-primary"></div>
         <div className="w-full h-[60%] bg-background"></div>
       </div>
-
+      {x.map((item) => (
+        <p key={item}>{item}</p>
+      ))}
       <div className="w-[90%] md:w-4/5 h-[80%] m-auto">
         <div className="w-full h-full flex flex-col items-center gap-10 px-7 py-10 md:p-10 bg-white rounded-xl drop-shadow-md">
           {step === 0 ? (
