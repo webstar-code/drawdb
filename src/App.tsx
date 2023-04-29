@@ -1,20 +1,17 @@
+import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAppDispatach, useAppSelector } from './hooks/useRedux';
+import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { userApi } from './api/user';
+import { auth } from './firebase';
+import { useAppDispatach } from './hooks/useRedux';
+import { IUser } from './intefaces';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import { Outlet } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase';
-import { userApi } from './api/user';
 import { login } from './reducers/userSlice';
-import { IUser } from './intefaces';
 
 function App() {
   const dispatch = useAppDispatach();
   const [loading, setLoading] = useState(true);
-  const { user } = useAppSelector((state) => state.userSlice);
-  console.log(user);
   useEffect(() => {
     setLoading(true);
     let unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -43,7 +40,7 @@ function App() {
   if (loading) {
     return (
       <div className="w-screen h-screen flex items-center justify-center">
-        <p className="text-base text-white">Loading...</p>
+        <p className="text-base text-black">Loading...</p>
       </div>
     );
   }
@@ -52,7 +49,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route index path="/login" element={<Login />} />
         <Route element={<RequireAuth />}>
           <Route path="/diagrams" element={<Dashboard />} />
         </Route>
@@ -61,19 +58,21 @@ function App() {
   );
 }
 
-const Home = () => {
+export function Home() {
   return (
-    <div className="w-full h-screen mx-auto border ">
+    <div className="w-full h-screen mx-auto border flex flex-col text-center ">
       Home Page
-      <iframe style={{ height: '1200px', width: '1200px' }} src="https://www.donmusic.in/buy-plan "></iframe>
+      <br />
+      MODE: {import.meta.env.MODE}
+      <br />
+      BASE URL: {import.meta.env.BASE_URL}
+      <br />
+      DOMAIN: {import.meta.env.VITE_DOMAIN}
     </div>
   );
-};
+}
 
 const RequireAuth = () => {
-  const { user } = useAppSelector((state) => state.userSlice);
-  let location = useLocation();
-
   // if (!user?.email || !user.profile?.name) {
   //   return <Navigate to="/login" state={{ from: location }} />
   // }
