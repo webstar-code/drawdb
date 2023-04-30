@@ -61,7 +61,7 @@ function App() {
 export function Home() {
   return (
     <div className="w-full h-screen mx-auto border flex flex-col text-center ">
-      Home Page
+      Home Page Feature XYZ
       <br />
       MODE: {import.meta.env.MODE}
       <br />
